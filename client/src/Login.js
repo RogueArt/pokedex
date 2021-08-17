@@ -23,8 +23,6 @@ export default function Login() {
     password: '',
   })
 
-  console.log(invalidCreds)
-
   // TO-DO: Move this utils.js
   async function redirectOnAuthTo(history, path) {
     // Get authenticated status, redirect to home
@@ -91,7 +89,7 @@ export default function Login() {
             width: 'max-content',
             height: 'auto',
             backgroundColor: 'white',
-            padding: '24px 92px',
+            padding: 'min(24px, 10vh) min(92px, 10vw)',
             borderRadius: '8px',
           }}
         >

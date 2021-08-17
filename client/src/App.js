@@ -19,7 +19,6 @@ function App() {
   const [isAuthenticated, setAuthenticated] = useState(false)
   const [isBusy, setBusy] = useState(true)
   const history = useHistory()
-  console.log(history)
 
   // Check whether or not user is authenticated
   useEffect(() => {

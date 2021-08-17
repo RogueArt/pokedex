@@ -42,9 +42,11 @@ function PokemonEntry({
   image,
   description,
   savedFavorite,
+  singlePokemon,
+  children
 }) {
   const [isFavorite, setIsFavorite] = useState(savedFavorite ?? false)
-
+  const [open, setOpen] = useState(false)
   const classes = useStyles()
 
   // Process props that we receive
@@ -74,45 +76,67 @@ function PokemonEntry({
     )
   }
 
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   return (
-    <Card className={classes.root}>
-      <CardActionArea>
-        <CardMedia className={classes.media} image={image} title={name} />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {capitalize(name)}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {description}
-          </Typography>
-          <Typography variant="body2" color="textPrimary" component="p">
-            <b>ID:</b> {id}
-          </Typography>
-          <Typography variant="body2" color="textPrimary" component="p">
-            <b>Abilities:</b> {abilityNames.join(', ')}
-          </Typography>
-          <Typography variant="body2" color="textPrimary" component="p">
-            <b>Height:</b> {height}
-          </Typography>
-          <Typography variant="body2" color="textPrimary" component="p">
-            <b>Weight:</b> {weight}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button
-          startIcon={showFavoriteIcon()}
-          color="secondary"
-          size="small"
-          onClick={handleFavoriteChange}
+    <div>
+      <Card className={classes.root}>
+        <CardActionArea onClick={handleOpen}>
+          <CardMedia className={classes.media} image={image} title={name} />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {capitalize(name)}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {description}
+            </Typography>
+            <Typography variant="body2" color="textPrimary" component="p">
+              <b>ID:</b> {id}
+            </Typography>
+            <Typography variant="body2" color="textPrimary" component="p">
+              <b>Abilities:</b> {abilityNames.join(', ')}
+            </Typography>
+            <Typography variant="body2" color="textPrimary" component="p">
+              <b>Height:</b> {height}
+            </Typography>
+            <Typography variant="body2" color="textPrimary" component="p">
+              <b>Weight:</b> {weight}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button
+            startIcon={showFavoriteIcon()}
+            color="secondary"
+            size="small"
+            onClick={handleFavoriteChange}
+          >
+            Favorite
+          </Button>
+          <Button size="small" color="primary" onClick={handleOpen}>
+            Learn More
+          </Button>
+        </CardActions>
+      </Card>
+      {open ? (
+        <PokemonModal
+          image={image}
+          pokeData={singlePokemon}
+          open={true}
+          handleClose={handleClose}
         >
-          Favorite
-        </Button>
-        <Button size="small" color="primary" onClick={showModal}>
-          Learn More
-        </Button>
-      </CardActions>
-    </Card>
+          {children}
+        </PokemonModal>
+      ) : (
+        ''
+      )}
+    </div>
   )
 }
 

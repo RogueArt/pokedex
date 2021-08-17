@@ -90,10 +90,6 @@ export default function Home() {
 
     const onScroll = function () {
       if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
-        console.log(
-          window.innerHeight + window.scrollY,
-          document.body.offsetHeight
-        )
         setAtBottom(true)
       }
       setAtBottom(false)
@@ -115,7 +111,7 @@ export default function Home() {
       // Render the component using props
       const props = { name, id, abilities, weight, height, image, description, savedFavorite }
 
-      return <PokemonEntryMemo key={id} {...props} />
+      return <PokemonEntryMemo key={id} {...props} singlePokemon={singlePokemon} />
     })
   }
 

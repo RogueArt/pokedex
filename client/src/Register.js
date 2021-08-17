@@ -101,7 +101,7 @@ export default function Register() {
             width: 'max-content',
             height: 'auto',
             backgroundColor: 'white',
-            padding: '24px 92px',
+            padding: 'min(24px, 10vh) min(92px, 10vw)',
             borderRadius: '8px',
           }}
         >
@@ -152,7 +152,7 @@ export default function Register() {
           <Grid item className="register__item">
             <TextField
               error={!samePasswords ? 'error' : false}
-              helperText={!samePasswords ? "Passwords do not match." : ''}
+              helperText={!samePasswords ? 'Passwords do not match.' : ''}
               variant="outlined"
               label="Re-Enter Password"
               type="password"

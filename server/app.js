@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const path = require('path')
 var passport = require('passport');
 var crypto = require('crypto');
 var routes = require('./routes');
@@ -60,6 +61,7 @@ app.use((req, res, next) => {
  */
 
 // Imports all of the routes from ./routes/index.js
+app.use(express.static(path.resolve(__dirname, '../client/build')))
 app.use(routes);
 
 

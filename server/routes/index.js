@@ -1,3 +1,4 @@
+const path = require('path')
 const router = require('express').Router()
 const passport = require('passport')
 const genPassword = require('../lib/passwordUtils').genPassword
@@ -19,6 +20,7 @@ router.post(
 )
 
 router.get('/authenticated', (req, res) => {
+  // console.log('isAuthenticated :>> ', req.isAuthenticated());
   res.send(req.isAuthenticated())
 })
 
@@ -87,6 +89,17 @@ router.get('/favorites', async (req, res) => {
   res.send(favoritesCache[_id])
 })
 
+// Visiting this route logs the user out
+router.get('/logout', (req, res, next) => {
+  req.logout()
+  res.sendStatus(200)
+})
+
+router.get('*', (req, res, next) => {
+  res.sendFile(path.resolve(__dirname, '../../client/build', 'index.html'))
+})
+
+/*
 router.get('/', (req, res, next) => {
   res.send('<h1>Home</h1><p>Please <a href="/register">register</a></p>')
 })
@@ -113,24 +126,12 @@ router.get('/register', (req, res, next) => {
   res.send(form)
 })
 
-/**
- * Lookup how to authenticate users on routes with Local Strategy
- * Google Search: "How to use Express Passport Local Strategy"
- *
- * Also, look up what behaviour express session has without a maxage set
- */
 router.get('/protected-route', isAuth, (req, res, next) => {
   res.send('You made it to the route.')
 })
 
 router.get('/admin-route', isAdmin, (req, res, next) => {
   res.send('You made it to the admin route.')
-})
-
-// Visiting this route logs the user out
-router.get('/logout', (req, res, next) => {
-  req.logout()
-  res.sendStatus(200)
 })
 
 router.get('/login-success', (req, res, next) => {
@@ -142,5 +143,6 @@ router.get('/login-success', (req, res, next) => {
 router.get('/login-failure', (req, res, next) => {
   res.send('You entered the wrong password.')
 })
+*/
 
 module.exports = router

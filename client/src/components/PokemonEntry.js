@@ -49,7 +49,6 @@ function PokemonEntry({ name, abilities, id, weight, height, image, description,
     setIsFavorite(!isFavorite)
   
     // Make a request to the backend updating favorites
-    // if (isFavorite) axios.post('/favorites', id)
     axios.post('/favorites', { id, isFavorite: !isFavorite }).catch(_ => console.error('Server is down.'))
   }
 

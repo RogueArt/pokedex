@@ -22,14 +22,14 @@ const connection = mongoose
 
 // Creates simple schema for a User.  The hash and salt are derived from the user's given password when they register
 const UserSchema = new mongoose.Schema({
-    username: String,
-    hash: String,
-    salt: String,
-    favorites: [String]
-});
+  username: String,
+  hash: String,
+  salt: String,
+  favorites: [String],
+})
 
 // Defines the model that we will use in the app
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema)
 
 // Set up Express session to track user across sessions
 const session = require('express-session')
@@ -113,7 +113,6 @@ passport.deserializeUser(function (id, callBack) {
   })
 })
 
-
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -126,37 +125,29 @@ app.use(express.urlencoded({ extended: true }))
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../client/build')))
 
-// Login
+// Post data for login here
 app.post(
   '/users/login',
   passport.authenticate('local', { failureRedirection: '/login' }),
   (err, req, res, next) => {
     if (err) next(err)
-    
-    console.log('You, sir, are logged in!');
-
-    const { email, password } = req.body
-
-    // Validate email
-    
-    // Check if email & password combo exists in database
   }
-  )
+)
 
-  // Register
-  app.post('/users/register', (req, res) => {
-    const { username, password } = req.body
+// Register
+app.post('/users/register', (req, res) => {
+  const { username, password } = req.body
 
   // Validate email
-  
+
   // Validate password
   // Create a salt and hash from the plaintext password
   const saltHash = genPassword(password)
   const { salt, hash } = saltHash
-  
+
   // Store the salt and hash in the database
   const newUser = new User({ username, hash, salt, favorites: [] })
-  newUser.save().then((user) => console.log(user))
+  newUser.save().then(user => console.log(user))
 
   // Redirect to the login page
   res.redirect('/login')
@@ -167,16 +158,17 @@ app.get('/users/logout', (req, res) => {
   res.redirect('/login')
 })
 
-// app.get('/', (req, res) => {
-//   console.log('Visiting home page!')
-//   console.log(req.session);
-  
-//   // If not authenticated, redirect to login page
-//   if (!req.isAuthenticated()) return res.redirect('/login')
-  
-//   // Otherwise, send them to the index page
-//   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'))
-// })
+// Track any updates to favorites here
+const favorites = {}
+app.post('/favorites', (req, res) => {
+  const { id, isFavorite } = req.body
+  favorites[id] = isFavorite
+})
+
+// Respond saying if something is a favorite
+app.get('/favorites', (req, res) => {
+  res.send(favorites)
+})
 
 // All other GET requests not handled before will return our React app
 app.get('*', (req, res) => {
@@ -197,4 +189,15 @@ app.listen(PORT, () => {
 // Handle GET requests to /api route
 // app.get('/api', (req, res) => {
 //   res.json({ message: 'Hello from server!' })
+// })
+
+// app.get('/', (req, res) => {
+//   console.log('Visiting home page!')
+//   console.log(req.session);
+
+//   // If not authenticated, redirect to login page
+//   if (!req.isAuthenticated()) return res.redirect('/login')
+
+//   // Otherwise, send them to the index page
+//   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'))
 // })

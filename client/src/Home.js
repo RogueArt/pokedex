@@ -121,8 +121,6 @@ export default function Home() {
       const image = getPokemonImageLink(id)
       const savedFavorite = favorites[id]
 
-      console.log('savedFavorite, id :>> ', savedFavorite, id);
-
       // Render the component using props
       const props = { name, id, abilities, weight, height, image, description, savedFavorite }
 

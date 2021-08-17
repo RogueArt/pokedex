@@ -7,7 +7,6 @@ import PrimarySearchAppBar from './components/AppBar.js'
 import LoadingIcon from './components/LoadingIcon.js'
 
 import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
 import Box from '@material-ui/core/Box'
 
 const PokemonEntryMemo = React.memo(PokemonEntry)
@@ -138,7 +137,7 @@ export default function Home() {
           Pokédex
         </Typography>
         <Typography variant="body2" align="center" component="p">
-          Scroll down to see data on all 1,112 Pokémon.
+          Scroll down to see data on all 1,118 Pokémon.
         </Typography>
       </Box>
 

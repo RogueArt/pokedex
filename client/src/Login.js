@@ -12,11 +12,10 @@ import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
 
 import axios from 'axios'
-import { useHistory, Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 export default function Login() {
   const history = useHistory()
-  const [authed, setAuthed] = useState(false)
   const [invalidCreds, setInvalidCreds] = useState(false)
   const [formData, setFormData] = useState({
     username: '',
@@ -48,7 +47,6 @@ export default function Login() {
 
     // See if user was authenticated
     const authenticated = await redirectOnAuthTo(history, '/home')
-    setAuthed(authenticated)
 
     // If authenticated, credentials were correct
     setInvalidCreds(!authenticated)

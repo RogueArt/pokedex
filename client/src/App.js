@@ -1,13 +1,12 @@
 import axios from 'axios'
 
-import { BrowserRouter as Router, Route, Redirect, useHistory } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import Home from './Home.js'
 import Login from './Login.js'
 import Register from './Register.js'
-import Landing from './Landing.js'
 import ProtectedRoute from './components/ProtectedRoute.js'
 import LoadingIcon from './components/LoadingIcon.js'
 
@@ -18,7 +17,6 @@ import './styles/App.scss'
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(false)
   const [isBusy, setBusy] = useState(true)
-  const history = useHistory()
 
   // Check whether or not user is authenticated
   useEffect(() => {
@@ -56,47 +54,4 @@ function App() {
   return <>{loadContents()}</>
 }
 
-//  render={() => <Redirect to="/home" />}
-
 export default App
-
-/*
-            <Button
-        color="primary"
-        size="small"
-        variant="contained"
-        value={isAuthenticated}
-      >
-        Authentication Status: {isAuthenticated ? 'Yes' : 'No'}
-      </Button>
-
-<div>
-<nav className="navbar">
-  <ul className="navbar__list">
-    <li>
-      <Link className="navbar__link" to="/home">
-        Home
-      </Link>
-    </li>
-    <li>
-      <Link className="navbar__link" to="/login">
-        Login
-      </Link>
-    </li>
-    <li>
-      <Link className="navbar__link" to="/register">
-        Register
-      </Link>
-    </li>
-  </ul>
-</nav> 
-      
-*/
-
-/* A <Switch> looks through its children <Route>s and
-      renders the first one that matches the current URL. 
-<Switch>
-*/
-
-/* </Switch> 
-</div> */

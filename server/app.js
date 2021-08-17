@@ -70,4 +70,4 @@ app.use(routes);
  */
 
 // Server listens on http://localhost:3001
-app.listen(3001, () => console.log('Started server on port 3001'));
+app.listen(process.env.PORT ?? 3001, () => console.log('Started server on port 3001'));

@@ -1,57 +1,44 @@
 import axios from 'axios'
 
-import { useState, useEffect } from 'react'
-import { useDebounce } from 'use-debounce'
+import React, { useState, useEffect } from 'react'
 
 import PokemonEntry from './components/PokemonEntry.js'
 import PrimarySearchAppBar from './components/AppBar.js'
 import LoadingIcon from './components/LoadingIcon.js'
 
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Box from '@material-ui/core/Box'
+
+const PokemonEntryMemo = React.memo(PokemonEntry)
 
 // TO-DO: Figure out what to do with dependency array
 // TO-DO: Clean up API call code so that it's more generic
 // TO-DO: Don't pass as much data to PokemonEntry
 // TO-DO: Refactor use effect code so it's less cursed in using state change
-
-function Filter() {
-  const [filterTerm, setFilterTerm] = useState('')
-
-  return (
-    <Box textAlign="center">
-      <TextField
-        label="Filter Pokemon"
-        value={filterTerm}
-        onChange={e => setFilterTerm(e.target.value)}
-      ></TextField>
-    </Box>
-  )
-}
-
 export default function Home() {
   const limit = 20
 
   const [offset, setOffset] = useState(0)
   const [pokeData, setPokeData] = useState([])
   const [favorites, setFavorites] = useState({})
+  
 
-  const [filterTerm, setFilterTerm] = useState('')
-  const [filterTermValue] = useDebounce(filterTerm, 500)
+  const [searchTerm, setSearchTerm] = useState('')
+  // const [searchTermValue] = useDebounce(searchTerm, 500)
   
   // Needed for
   const [atBottom, setAtBottom] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   // Make requests to get data for first 20 pokemon
+  let cancel
   async function requestPokemonData(idx) {
     const links = [
       `https://pokeapi.co/api/v2/pokemon/${idx}`,
       `https://pokeapi.co/api/v2/pokemon-species/${idx}/`,
     ]
-    return Promise.all(links.map(link => axios.get(link)))
+    return Promise.all(links.map(link => axios.get(link, { cancelToken: new axios.CancelToken(c => cancel = c)})))
   }
 
   // Get the images for first 20 pokemon as well
@@ -102,7 +89,11 @@ export default function Home() {
     fetchPokemonData(limit, offset)
 
     const onScroll = function () {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+        console.log(
+          window.innerHeight + window.scrollY,
+          document.body.offsetHeight
+        )
         setAtBottom(true)
       }
       setAtBottom(false)
@@ -114,7 +105,7 @@ export default function Home() {
   function renderPokemon() {
     return pokeData.map(singlePokemon => {
       // Return nothing if the filter term doesn't match our poekmon
-      if (!singlePokemon.name.includes(filterTermValue)) return ''
+      if (!singlePokemon.name.includes(searchTerm)) return ''
 
       // Gather data for our props
       const { name, id, abilities, weight, height, description } = singlePokemon
@@ -124,34 +115,35 @@ export default function Home() {
       // Render the component using props
       const props = { name, id, abilities, weight, height, image, description, savedFavorite }
 
-      return <PokemonEntry key={id} {...props} />
+      return <PokemonEntryMemo key={id} {...props} />
     })
   }
 
+  function handleSearchChange(e) {
+    setSearchTerm(e.target.value)
+  }
 
   return (
     <div className="Home">
-      <PrimarySearchAppBar />
-      {/* Title and subtitle */}
-      <Typography
-        className="app__title"
-        variant="h2"
-        align="center"
-        component="h1"
-      >
-        Pokédex
-      </Typography>
-      <Typography variant="body" align="center" component="p">
-        Scroll down to see data on all 1,112 Pokémon.
-      </Typography>
+      {/* TO-DO: Optimize this so it doesn't shred re-renders */}
+      <PrimarySearchAppBar
+        searchTerm={searchTerm}
+        onHandleSearchChange={handleSearchChange}
+      />
 
-      {/* Search filter */}
-      <Box textAlign="center">
-        <TextField
-          label="Filter Pokemon"
-          value={filterTerm}
-          onChange={e => setFilterTerm(e.target.value)}
-        ></TextField>
+      {/* Title and subtitle */}
+      <Box m={1}>
+        <Typography
+          className="app__title"
+          variant="h2"
+          align="center"
+          component="h1"
+        >
+          Pokédex
+        </Typography>
+        <Typography variant="body2" align="center" component="p">
+          Scroll down to see data on all 1,112 Pokémon.
+        </Typography>
       </Box>
 
       {/* App */}
@@ -160,6 +152,16 @@ export default function Home() {
     </div>
   )
 }
+/*
+      Search filter
+      <Box textAlign="center">
+        <TextField
+          label="Filter Pokemon"
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        ></TextField>
+      </Box>
+      */
 
 /*
       <Button

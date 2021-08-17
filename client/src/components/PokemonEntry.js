@@ -7,10 +7,13 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import Modal from '@material-ui/core/Modal'
 
 // Material UI icons
 import Favorite from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
+
+import PokemonModal from './PokemonModal.js'
 
 import { useState } from 'react'
 import axios from 'axios'
@@ -30,9 +33,18 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function PokemonEntry({ name, abilities, id, weight, height, image, description, savedFavorite }) {
+function PokemonEntry({
+  name,
+  abilities,
+  id,
+  weight,
+  height,
+  image,
+  description,
+  savedFavorite,
+}) {
   const [isFavorite, setIsFavorite] = useState(savedFavorite ?? false)
-  
+
   const classes = useStyles()
 
   // Process props that we receive
@@ -41,15 +53,25 @@ function PokemonEntry({ name, abilities, id, weight, height, image, description,
   )
 
   function showFavoriteIcon() {
-    return isFavorite ? <Favorite /> : <FavoriteBorder /> 
+    return isFavorite ? <Favorite /> : <FavoriteBorder />
   }
-  
+
   function handleFavoriteChange() {
     // Set it to opposite of what it was before
     setIsFavorite(!isFavorite)
-  
+
     // Make a request to the backend updating favorites
-    axios.post('/favorites', { id, isFavorite: !isFavorite }).catch(_ => console.error('Server is down.'))
+    axios
+      .post('/favorites', { id, isFavorite: !isFavorite })
+      .catch(_ => console.error('Server is down.'))
+  }
+
+  function showModal() {
+    return (
+      <Modal disablePortal disableEnforceFocus disableAutoFocus open>
+        <PokemonModal />
+      </Modal>
+    )
   }
 
   return (
@@ -78,10 +100,15 @@ function PokemonEntry({ name, abilities, id, weight, height, image, description,
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button startIcon={showFavoriteIcon()} color="secondary" size="small" onClick={handleFavoriteChange}>
+        <Button
+          startIcon={showFavoriteIcon()}
+          color="secondary"
+          size="small"
+          onClick={handleFavoriteChange}
+        >
           Favorite
         </Button>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={showModal}>
           Learn More
         </Button>
       </CardActions>

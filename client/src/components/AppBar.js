@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { alpha, makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -81,10 +81,13 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({
+  searchTerm,
+  onHandleSearchChange,
+}) {
   const classes = useStyles()
-  const [anchorEl, setAnchorEl] = React.useState(null)
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
   const history = useHistory()
 
   const isMenuOpen = Boolean(anchorEl)
@@ -201,6 +204,8 @@ export default function PrimarySearchAppBar() {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              value={searchTerm}
+              onChange={onHandleSearchChange}
             />
           </div>
           <div className={classes.grow} />

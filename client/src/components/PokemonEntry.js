@@ -1,7 +1,3 @@
-/* .App {
-  text-align: center;
-} */
-
 // Material UI components
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -34,8 +30,8 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function PokemonEntry({ name, abilities, id, weight, height, image }) {
-  const [isFavorite, setIsFavorite] = useState(false)
+function PokemonEntry({ name, abilities, id, weight, height, image, description, savedFavorite }) {
+  const [isFavorite, setIsFavorite] = useState(savedFavorite ?? false)
   
   const classes = useStyles()
 
@@ -51,9 +47,10 @@ function PokemonEntry({ name, abilities, id, weight, height, image }) {
   function handleFavoriteChange() {
     // Set it to opposite of what it was before
     setIsFavorite(!isFavorite)
-
+  
     // Make a request to the backend updating favorites
-    if (isFavorite) axios.post('/favorites', id)
+    // if (isFavorite) axios.post('/favorites', id)
+    axios.post('/favorites', { id, isFavorite: !isFavorite }).catch(_ => console.error('Server is down.'))
   }
 
   return (
@@ -65,8 +62,7 @@ function PokemonEntry({ name, abilities, id, weight, height, image }) {
             {capitalize(name)}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            {description}
           </Typography>
           <Typography variant="body2" color="textPrimary" component="p">
             <b>ID:</b> {id}
@@ -83,7 +79,7 @@ function PokemonEntry({ name, abilities, id, weight, height, image }) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button startIcon={showFavoriteIcon()} color="secondary" size="small" onClick={() => setIsFavorite(!isFavorite)}>
+        <Button startIcon={showFavoriteIcon()} color="secondary" size="small" onClick={handleFavoriteChange}>
           Favorite
         </Button>
         <Button size="small" color="primary">

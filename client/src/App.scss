@@ -1,0 +1,55 @@
+$primary-color: #3f51b5;
+
+.navbar {
+  background-color: $primary-color;
+  padding: 20px 16px;
+  text-align: right;
+
+  &__list {
+    display: flex;
+    justify-content: right;
+    gap: 24px;
+
+    list-style-type: none;
+    
+    margin: 0;
+    padding-left: 0px;
+    // display: flex;
+  }
+
+  &__link {
+    color: white;
+    text-decoration: none;
+  
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.app {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 48px;
+
+  margin: 24px;
+
+  &__title {
+    margin-top: 24px;
+  }
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.loading {
+  // margin-top: 48px;
+  // margin-bottom: 48px;
+  
+  // margin: 48px auto;
+  // margin-bottom: 16px;
+}

@@ -5,6 +5,9 @@ import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
 import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import Box from '@material-ui/core/Box'
+
 import axios from 'axios'
 
 export default function Login() {
@@ -25,7 +28,26 @@ export default function Login() {
   }
 
   return (
-    <div>
+    <div className="login">
+        <TextField
+          label="Email Address"
+          value={formData.username}
+          onChange={e => handleChange(e, 'username')}
+        ></TextField>
+
+        <Button
+          color="primary"
+          size="small"
+          variant="contained"
+          onClick={sendFormData}
+        >
+          Sign In
+        </Button>
+    </div>
+  )
+}
+
+/*
       <FormControl>
         <InputLabel htmlFor="username">Email Address</InputLabel>
         <Input
@@ -42,14 +64,4 @@ export default function Login() {
           onChange={e => handleChange(e, 'password')}
         ></Input>
       </FormControl>
-      <Button
-        color="primary"
-        size="small"
-        variant="contained"
-        onClick={sendFormData}
-      >
-        Sign In
-      </Button>
-    </div>
-  )
-}
+      */

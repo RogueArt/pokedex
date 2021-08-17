@@ -20,12 +20,13 @@ async function redirectOnAuthTo(history, path) {
   if (authenticated) history.push(path)
 }
 
+
 const useStyle = makeStyles(theme => ({
   root: {
     '& .MuiFormControl-root': {
-      margin: theme.spacing(2),
-    },
-  },
+      margin: theme.spacing(2)
+    }
+  }
 }))
 
 export default function Login() {
@@ -56,14 +57,7 @@ export default function Login() {
 
   return (
     <div className="login">
-      <Grid
-        className="login__card"
-        container
-        direction="column"
-        // xs={10}
-        // justifyContent="center"
-        // alignItems="center"
-      >
+      <Grid className="login__card" container direction="column" justifyContent="center" alignItems="center">
         <Grid item className="login__item">
           <TextField
             variant="outlined"

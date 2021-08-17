@@ -5,11 +5,11 @@ import { useDebounce } from 'use-debounce'
 
 import PokemonEntry from './components/PokemonEntry.js'
 import PrimarySearchAppBar from './components/AppBar.js'
+import LoadingIcon from './components/LoadingIcon.js'
 
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import Box from '@material-ui/core/Box'
 
 // TO-DO: Figure out what to do with dependency array
@@ -128,13 +128,6 @@ export default function Home() {
     })
   }
 
-  function showLoadingIcon() {
-    return (
-      <Box textAlign="center">
-        <CircularProgress className="loading" color="secondary" />
-      </Box>
-    )
-  }
 
   return (
     <div className="Home">
@@ -163,7 +156,7 @@ export default function Home() {
 
       {/* App */}
       <div className="app">{renderPokemon()}</div>
-      {isLoading ? showLoadingIcon() : ''}
+      {isLoading ? <LoadingIcon /> : ''}
     </div>
   )
 }

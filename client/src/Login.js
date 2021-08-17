@@ -22,7 +22,7 @@ export default function Login() {
 
   function sendFormData() {
     axios
-      .post('http://localhost:3001/users/login', formData)
+      .post('/login', formData)
       .catch(err => console.error('Could not reach server'))
   }
 

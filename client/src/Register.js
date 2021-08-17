@@ -24,7 +24,7 @@ export default function Login() {
   function sendFormData() {
     const { username, password } = formData
     axios
-      .post('/users/register', { username, password })
+      .post('/register', { username, password })
       .then(res => console.log(res))
       .catch(err => console.error('Could not reach server'))
   }

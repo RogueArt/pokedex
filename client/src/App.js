@@ -22,7 +22,7 @@ function App() {
   useEffect(() => {
     // Set if user is authenticated or not
     async function setAuthStatus() {
-      const { data: authenticated } = await axios.get('/users/authenticated')
+      const { data: authenticated } = await axios.get('/authenticated')
       setAuthenticated(authenticated)
       console.log('authenticated :>> ', authenticated);
 

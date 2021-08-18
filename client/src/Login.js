@@ -11,16 +11,26 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
 
+import * as EmailValidator from 'email-validator'
+
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
 export default function Login() {
   const history = useHistory()
   const [invalidCreds, setInvalidCreds] = useState(false)
+  const [invalidEmail, setInvalidEmail] = useState(false)
+  const [fieldsAreEmpty, setEmptyFields] = useState(false)
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   })
+
+  function checkFieldsEmpty() {
+    // Everything must have a non-zero length
+    return formData.username.length === 0 || formData.password.length === 0
+  }
 
   // TO-DO: Move this utils.js
   async function redirectOnAuthTo(history, path) {
@@ -40,6 +50,16 @@ export default function Login() {
   }
 
   async function sendFormData() {
+    // Validate email and set them in response
+    const isEmailValid = EmailValidator.validate(formData.username)
+    setInvalidEmail(isEmailValid)
+
+    // Check all forms are filled
+    const isEmpty = checkFieldsEmpty()
+    setEmptyFields(isEmpty)
+
+    if (!isEmailValid || isEmpty) return
+
     // Send a post request
     await axios
       .post('/login', formData)
@@ -147,9 +167,10 @@ export default function Login() {
               component="p"
               onClick={focusInput}
             >
-              {invalidCreds ? 'Invalid password or username.' : ''}
+              {invalidCreds ? 'Invalid password or email.' : ''}
             </Typography>
           </Grid>
+          <ShowFieldsEmpty fieldsAreEmpty={fieldsAreEmpty} />
           <Grid item className="login__item">
             <Button
               color="primary"
@@ -170,6 +191,23 @@ export default function Login() {
         </Grid>
       </Grid>
     </div>
+  )
+}
+
+function ShowFieldsEmpty({ fieldsAreEmpty }) {
+  if (!fieldsAreEmpty) return <></>
+
+  return (
+    <Typography
+      error={!fieldsAreEmpty ? 'error' : false}
+      helperText={!fieldsAreEmpty ? 'Fill out all the fields.' : ''}
+      variant="body2"
+      color="error"
+      style={{ textAlign: 'center', marginBottom: '16px' }}
+      component="p"
+    >
+      You must fill out all the fields.
+    </Typography>
   )
 }
 

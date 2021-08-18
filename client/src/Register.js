@@ -8,6 +8,7 @@ import Link from '@material-ui/core/Link'
 
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import * as EmailValidator from 'email-validator'
 
 // TO-DO: Move this utils.js
 async function redirectOnAuthTo(history, path) {
@@ -29,6 +30,8 @@ export default function Register() {
     reenterPassword: '',
   })
   const [samePasswords, setSamePasswords] = useState(true)
+  const [invalidEmail, setInvalidEmail] = useState(false)
+  const [fieldsAreEmpty, setEmptyFields] = useState(false)
 
   function handleChange(e, type) {
     formData[type] = e.target.value
@@ -39,16 +42,31 @@ export default function Register() {
     return formData.password === formData.reenterPassword
   }
 
-  async function sendFormData() {
+  function checkFieldsEmpty() {
     // Everything must have a non-zero length
-    if (formData.username.length === 0) return 
-    if (formData.password.length === 0) return 
-    if (formData.reenterPassword.length === 0) return 
+    return (
+      formData.username.length === 0 ||
+      formData.password.length === 0 ||
+      formData.reenterPassword.length === 0
+    )
+  }
 
-    // Make sure passwords match before sending
-    setSamePasswords(arePasswordsSame())
-    if (arePasswordsSame() === false) return
+  async function sendFormData() {
+    // Check if there are any empty fields
+    const fieldsEmpty = checkFieldsEmpty()
+    setEmptyFields(fieldsEmpty)
+
+    // Validate email and set them in response
+    const isEmailValid = EmailValidator.validate(formData.username)
+    setInvalidEmail(!isEmailValid)
     
+    // Make sure passwords match before sending
+    const arePassesSame = arePasswordsSame()
+    setSamePasswords(arePassesSame)
+
+    // Don't make an account if it fails these checks
+    if (fieldsEmpty || !arePassesSame || !isEmailValid) return
+
     const { username, password } = formData
     // Send a post request
     await axios
@@ -118,6 +136,8 @@ export default function Register() {
           </Grid>
           <Grid item className="register__item">
             <TextField
+              error={invalidEmail ? 'error' : false}
+              helperText={invalidEmail ? 'Email is not valid' : ''}
               variant="outlined"
               label="Email Address"
               type="email"
@@ -155,6 +175,7 @@ export default function Register() {
               className="register__field"
             ></TextField>
           </Grid>
+          <ShowFieldsEmpty fieldsAreEmpty={fieldsAreEmpty} />
           <Grid item className="register__item">
             <Button
               color="primary"
@@ -175,6 +196,23 @@ export default function Register() {
         </Grid>
       </Grid>
     </div>
+  )
+}
+
+function ShowFieldsEmpty({ fieldsAreEmpty }) {
+  if (!fieldsAreEmpty) return <></>
+  
+  return (
+    <Typography
+      error={!fieldsAreEmpty ? 'error' : false}
+      helperText={!fieldsAreEmpty ? 'Fill out all the fields.' : ''}
+      variant="body2"
+      color="error"
+      style={{ textAlign: 'center', marginBottom: '16px' }}
+      component="p"
+    >
+      You must fill out all the fields.
+    </Typography>
   )
 }
 

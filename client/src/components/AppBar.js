@@ -5,6 +5,8 @@ import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import InputBase from '@material-ui/core/InputBase'
+import Star from '@material-ui/icons/Star'
+import StarBorder from '@material-ui/icons/StarBorder'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -82,6 +84,8 @@ const useStyles = makeStyles(theme => ({
 export default function PrimarySearchAppBar({
   searchTerm,
   onHandleSearchChange,
+  isShowingFavorites,
+  handleShowingFavorites,
 }) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -180,8 +184,10 @@ export default function PrimarySearchAppBar({
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handleShowingFavorites}
           >
-            <MenuIcon />
+            {isShowingFavorites ? <Star /> : <StarBorder />}
+            {/* <MenuIcon /> */}
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             Pokédex

@@ -29,6 +29,7 @@ export default function Home() {
   // Needed for
   const [atBottom, setAtBottom] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isShowingFavorites, setIsShowingFavorites] = useState(false)
 
   // Make requests to get data for first 20 pokemon
   let cancel
@@ -46,6 +47,11 @@ export default function Home() {
     const paddedIdx = `00${idx}`.slice(-3)
     const imageLink = `http://assets.pokemon.com/assets/cms2/img/pokedex/full/${paddedIdx}.png`
     return imageLink
+  }
+
+  // Toggle back and forth
+  function handleShowingFavorites() {
+    setIsShowingFavorites(!isShowingFavorites)
   }
 
   async function fetchPokemonData(limit, offset) {
@@ -102,11 +108,14 @@ export default function Home() {
       // Return nothing if the filter term doesn't match our poekmon
       if (!singlePokemon.name.includes(searchTerm)) return ''
 
+      // If we are showing favorites, then only return pokemon we've favorited
+      if (isShowingFavorites && !favorites[singlePokemon.id]) return ''
+      
       // Gather data for our props
       const { name, id, abilities, weight, height, description } = singlePokemon
       const image = getPokemonImageLink(id)
       const savedFavorite = favorites[id]
-
+      
       // Render the component using props
       const props = { name, id, abilities, weight, height, image, description, savedFavorite }
 
@@ -124,6 +133,8 @@ export default function Home() {
       <PrimarySearchAppBar
         searchTerm={searchTerm}
         onHandleSearchChange={handleSearchChange}
+        isShowingFavorites={isShowingFavorites}
+        handleShowingFavorites={handleShowingFavorites}
       />
 
       {/* Title and subtitle */}

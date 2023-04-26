@@ -5,7 +5,7 @@ the backend. See video below for the full list of features!
 
 Try the live app [here](https://react-express-pokedex.herokuapp.com/)!
 
-Here's a [YouTube video](https://www.youtube.com/watch) covering all the
+Here's a [YouTube video](https://www.youtube.com/watch?v=9VjhjTBxgmg) covering all the
 features of this app!
 
 # Getting Started
